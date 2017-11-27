@@ -173,6 +173,7 @@ class PackageCatalog extends Component{
                 action_button = <td><button onClick={this.editPackage} id={packages._id} value={index}>Edit</button>
                                     <button onClick={this.deletePackage} id={packages._id} value={index}>Delete</button> </td>
                 action_button_header = <th>Actions</th>
+<<<<<<< Updated upstream
             }
             return(
 
@@ -207,6 +208,41 @@ class PackageCatalog extends Component{
         let categories = this.state.categories.map((category,index) =>{
             return( <option key={index} value={category}>{category}</option> )
         })
+=======
+                action_button = <td><button onClick={this.editPackage} 	id={packages._id} value={index}>Edit</button>
+                                        <button onClick={this.deletePackage} 	id={packages._id} value={index}>Delete</button> </td>
+                    return(
+                        <tr key={index}>
+                                        {action_button}
+                                        <td>{packages._id}</td>
+                                        <td>{packages.name}</td>
+                                        <td>{packages._category}</td>
+                                        <td>{packages.value}</td>
+                                        <td>{packages.description}</td>
+                                        <td>{packages.bid_increment}</td>
+                                        <td>{}</td>
+                                        <td>{packages._items.map((item,index)=>{ 	return <li key={index} >{item.name}</li>}) } </td>
+                                        <td><Link to={`/packageDetails/${packages._id}`}>Show</Link></td>
+                        </tr>
+                 )}else {
+                        return(
+                            <div key={index} className="card package_card w-75">
+                                        <img className="card-img-top card_img" src="" alt={`${packages.name}`}/>
+                                        <div className="card-block">
+                                            <h4 className="card-title text-uppercase">{packages.name}</h4>
+                                            <p className="card-text">Category: {packages._category}</p>
+                                            <p className="card-text">STARTING BID: {packages._bids[0]}</p>
+                                            <p className="card-text">Current Bid: Placholder for conditional logic involving bid being empty</p>
+                                            <p className="card-text"><Link to={`/packageDetails/${packages._id}`}>Show</Link></p>
+                                        </div>
+                                    </div>
+                        )
+                }
+            })
+    let categories = this.state.categories.map((category,index) =>{
+                        return( <option key={index} value={category}>{category}</option> )
+                    })
+>>>>>>> Stashed changes
 
         return(
             <div>

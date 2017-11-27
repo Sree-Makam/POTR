@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import Axios from 'axios';
 
 class Select extends Component{
-    constructor(props){
-        super(props);
-    }
     handleChange = (e) => {
         this.props.handleChange(e); //invoke the parent(itemEntryAdmin.js) callback for handling the changes
     }

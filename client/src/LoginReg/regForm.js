@@ -81,7 +81,7 @@ class RegForm extends React.Component{
                       password:'',
                       cnfmPassword:''
               })
-
+              localStorage.setItem('user',response.data.user.userName);
               window.location.href ="/package"
 
             };
@@ -150,15 +150,15 @@ class RegForm extends React.Component{
                     <div className="form-group row">
                       <label className="col-sm-2 col-form-label">Phone Number</label>
                       <div className="col-sm-10">
-                        <input type='text' id='phoneNumber' className='form-control' name='phoneNumber'
-                        placeholder='Phone Number' onChange={this.handleChange} value={this.state.phoneNumber} />
+                        <input type='tel' id='phoneNumber' className='form-control' name='phoneNumber'
+                        placeholder='ex: 4080004488' onChange={this.handleChange} value={this.state.phoneNumber} />
                       </div>
                     </div>
 
                     <div className="form-group row">
                       <label className="col-sm-2 col-form-label">Email Address</label>
                       <div className="col-sm-10">
-                        <input type='text' id='email' className='form-control' name='email'
+                        <input type='email' id='email' className='form-control' name='email'
                         placeholder='Email Address' onChange={this.handleChange} value={this.state.email} required/>
                       </div>
                     </div>

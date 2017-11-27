@@ -20,4 +20,9 @@
 }
 .bidInput{
     background-color: burlywood;
-}   
+} 
+.donor-info{
+    text-transform: capitalize;
+    font-weight: bold;
+    color: orangered;
+}  

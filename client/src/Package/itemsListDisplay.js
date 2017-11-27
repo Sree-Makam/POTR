@@ -28,11 +28,14 @@ class DisplayItems extends Component{
 
     }
     rowSelect= (e) =>{
-        var object;
+        var object={};
         if(e.target.checked){
             for (var i = 0; i < this.state.itemsList.length; i++){
-              if (e.target.name == this.state.itemsList[i]._id){
+                console.log('e.target.name', e.target.name + " " + typeof(e.target.name));
+                console.log('state _id' + this.state.itemsList[i]._id + " " + typeof(this.state.itemsList[i]._id));
+              if (e.target.name === String(this.state.itemsList[i]._id)){
                 object = this.state.itemsList[i];
+                   console.log('e.target.name', e.target.name);
                 break;
               }
             }
