@@ -16,10 +16,11 @@ class Menu extends React.Component{
     logOut = () => {
       Axios({
           method: "get",
-          url: "/users/logout",
+          url: "/api/users/logout",
           data: {}
       }).then((response) => {
-          this.loggedin()
+         localStorage.clear();
+          
       }).catch((err) =>{
           console.log(err);
       })
@@ -28,12 +29,12 @@ class Menu extends React.Component{
     loggedin = () => {
       Axios({
           method: "get",
-          url: "/users/loggedin",
+          url: "/api/users/loggedin",
           data: {}
       }).then((response) => {
-          if (response.data.login_check !== this.state.loggedin){
+         if (response.data.login_check !== this.state.loggedIn){
             this.setState({
-                    loggedin: response.data.login_check,
+                    loggedIn: response.data.login_check,
                     admin : response.data.admin
             })
           }
@@ -41,19 +42,20 @@ class Menu extends React.Component{
           console.log(err);
       })
     }
-
+  
     componentWillMount(){
         this.loggedin();
     }
-    
+
     componentWillUpdate(){
         this.loggedin();
     }
-    
+
     render(){
         var htmlLogCode = "";
-        if (this.state.loggedin === true){
+        if (this.state.loggedIn === true){
           htmlLogCode = <div>
+                            <li>Hi, {localStorage.user} </li>
                             <li><Link to='/' onClick={this.logOut}><span className="glyphicon glyphicon-log-out"></span> Logout</Link></li>
                         </div>
         }
