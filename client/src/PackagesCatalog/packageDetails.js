@@ -54,6 +54,7 @@ class PackageDetails extends Component{
     }
 
     componentDidMount(){
+
         var packIdId = this.props.match.params.packageId;
         Axios.get("/api/packages/" + packIdId)
         .then((result) =>{
@@ -172,6 +173,7 @@ class PackageDetails extends Component{
         if(this.state.listOfPackages){
         return(
 
+
             <div className="container">
                 <div className="row">
                     <div className='container-fluid bidContainer'>
@@ -219,6 +221,7 @@ class PackageDetails extends Component{
                                     
                                 </div>
                                 <Link to='/package'>Back to All Packages</Link>
+
                             </div>
                         </div>
                     </div>
