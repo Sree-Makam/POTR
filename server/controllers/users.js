@@ -13,13 +13,27 @@ function UsersController(){
 	// get all bidders and their packages won, audit page
 	this.index = function(req,res){
 		console.log('UsersController index');
-		res.render('user')
+		User.find({}, function(err, users ){
+			if(err){
+				console.log(err)
+			}else{
+				var hash = {}
+				if(req.session.admin){
+					res.render('admin', {users :users, admin_hash: hash, userName: req.session.userName, admin: req.session.admin})
+				}else{
+					res.redirect('/api/packages')
+				}
+			}
+		})
 	};
 	// could use this to get the login/registration screen or for the admin to change between bidders
 	this.new = function(req,res){
 		console.log('hi');
-		res.render('login')
+		res.render('login', {userName: req.session.userName, admin: req.session.admin})
 	};
+	this.register = function(req,res){
+		res.render('user', {userName: req.session.userName, admin: req.session.admin})
+	}
 	// post the new user registration form and create a new user
 	// add redirect when done with refactor
 	this.create = function(req,res){
@@ -165,8 +179,47 @@ function UsersController(){
 	//are we allowing users to be able to edit / update their information
     this.update = function(req,res){
 		console.log('UsersController update');
-	}
+		User.findById(req.params.id ,  function(err, user){
+			if (err){
+				console.log(err)
+			}else {
+				user.admin = req.body.admin || user.admin
 
+				user.save(function(err, user){
+					if(err){
+					console.log(err)
+					}else{
+						res.send(user)
+					}
+				})
+			}
+		})
+	}
+	this.admin_change = function(req,res){
+		console.log('UsersController admin_change')
+		console.log('req.body:', Object.keys(req.body))
+
+		for(let users in req.body){
+
+			User.findById(users, function(err, user){
+				if (err){
+					console.log(err)
+				}else {
+					user.admin = req.body[users]
+					user.save(function(err, result){
+						if (err){
+							console.log(err)
+						}else{
+
+						}
+					})
+				}
+			})
+		}
+		setTimeout(function() {
+			res.redirect('/api/users');
+		}, 100);
+	}
 	this.loggedin = function(req,res){
 		console.log('reached loggedin function in server')
 		var login_check = false;
@@ -195,7 +248,7 @@ function UsersController(){
 		login_check = false;
 		req.session.destroy();
 		console.log(req.session);
-        return res.json(true)
+        res.redirect('/api/packages')
 
 	}
 

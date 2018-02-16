@@ -124,8 +124,12 @@ var io = require('socket.io').listen(server);
 		})()
 // ---------------------------------- 000 --------------------------------------
 
-io.sockets.on('connection', function(socket){
 
+io.sockets.on('connection', function(socket){
+		socket.on("helloWorld", function(data){
+			console.log(data)
+	})
+	
 // DEBUGGING INFO JUST TO MONITOR allBidsObject is healty
 console.log("/".repeat(20) + " allBidsBigObj before socket logic " + "/".repeat(20));
 console.dir(allBidsBigObj); console.log("/".repeat(20));
@@ -137,12 +141,15 @@ console.dir(allBidsBigObj); console.log("/".repeat(20));
 
 			// THE UNIQUE CHANNEL FOR PARTICULAR PACKAGE WITH IT'S ID IN THE END
 			var uniqChatUpdateId = 'update_chat' + data.packId;
+			console.log("message was received in server")
+			console.log("in server, bid is ", data.bid)
 
 			// WE WANT TO DISABLE ALL BUTTONS UNTIL WE UPDATE THE DATABASE AND SERVER OBJECT
 					var buttonStateChannel = 'button_state' + data.packId;
 		      io.emit(buttonStateChannel, {
 						button: false
-		      } );
+					} );
+					io.emit("serverTalksBack", {packId: data.packId, bid: data.bid})
 
 // ------------------------------ 001 -------------------------------
 // IF statement of "package button state" on the SERVER to prevent overload of mongoDB

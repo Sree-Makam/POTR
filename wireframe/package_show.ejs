@@ -2,9 +2,42 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Package Show</title>
+		<title>Package Show</title>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+		<script type='text/javascript'>
+			var socket = io.connect('http://localhost:8000');
+
+			$(document).on('submit', function(){
+					console.log("Before receiving from server, " + $('#bid_amount')[0].defaultValue)
+					socket.emit('msg_sent', {packId: '<%= package._id %>', bid: parseInt($('#bid_amount')[0].defaultValue), userName: '<%= userName %>' })
+					event.preventDefault();
+					// replace replaceWith val maybe??
+					socket.on("serverTalksBack", function(data){
+						$('#currentBid').text("Current Bid: " + data.bid)
+						$('#bid_amount').replaceWith("<input id='bid_amount' readonly value='" + String(parseInt(data.bid) + <%= parseInt(package.bid_increment) %>)+" ' >")
+					})
+				})
+		</script>
   </head>
+
 	<body>
+    <nav>
+      <a href="/api/items">Catalog</a> |
+      <a href="/api/packages">Packages/Bids</a> |
+      <%if (admin){%>
+        <a href='/api/users'>All Users</a> |
+        <a href="/api/items/new"> Add Item</a> |
+        <a href="/api/packages/new"> Add Package</a> |
+      <%}%>
+      <%if (userName){%>
+        <a href='/api/users/logout'>Logout</a> |
+      <%}else{%>
+      <a href='/api/users_login'>Login</a> |
+      <a href="/users/register">Register </a> |
+      <%}%>
+
+    </nav>
 		<div>
 			<h3><%= package.name %> </h3>
 			<p>Package Description: <%= package.description %></p>
@@ -13,21 +46,32 @@
 		</div>
 
 		<div>
-			
+
 			<% if (package.bids.length == 0) {%>
-				<h3>Current Bid: None by: nobody</h3>
+				<h3 id ='currentBid'>Current Bid: None by: nobody</h3>
 			<%} else {%>
-				<h3>Current Bid: <%= package.bids[package.bids.length -1] %> </h3>
+				<h3 id ='currentBid'>Current Bid: <%= package.bids[package.bids.length-1].bidAmount%> </h3>
 			<%}%>
-			
+
 			<h3>Next Bid:</h3>
-			
+			<form action='/api/packages/<%= package._id %>'>
+				<% if (package.bids == false) {%>
+					<input id='bid_amount' readonly value='<%= package.amount%>'>
+				<%} else {%>
+					<input id='bid_amount' readonly value='<%= package.bids[package.bids.length-1].bidAmount + package.bid_increment %> '>
+				<%}%>
+
+			<% if (!userName) {%>
+				<a href='/api/users_login'>Login</a>
+			<%}else{%>
+				<input type='submit' value='Place Bid'>
+			<%}%>
+			</form>
 		</div>
 		<div>
 			<h5>Items In Package</h5>
-			<!-- <p>This is name: <%= package._items[0].name %> </p> -->
 			<% for (var i = 0; i < package._items.length; i++) {%>
-				<p>Item Name: <%= package._items[i].name %> donated by: <%= package._items[i].donor %></p> 
+				<p>Item Name: <%= package._items[i].name %> donated by: <%= package._items[i].donor %></p>
 			<%}%>
 		</div>
 
